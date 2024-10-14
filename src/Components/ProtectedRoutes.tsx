@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
-const ProtectedRoute = ({ children }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ProtectedRoute = ({ children }: any) => {
   const location = useLocation();
   const navigate = useNavigate();
   const loggedInUser = useSelector((state: RootState) => state.user.email);
@@ -12,7 +13,7 @@ const ProtectedRoute = ({ children }) => {
     if (!loggedInUser) {
       navigate('/login', { state: { from: location } });
     }
-  }, [loggedInUser, navigate]);
+  }, [loggedInUser, navigate, location]);
 
   return loggedInUser ? children : null;
 };

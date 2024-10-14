@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../store/features/userSlice";
 import { RootState } from "../store/store";
 import { toast, Toaster } from "sonner";
+import { object, string } from "yup";
 
 const Form = ({ title }: FormInterface) => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,18 @@ const Form = ({ title }: FormInterface) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  const signupSchema = object({
+    email: string().email(),
+    password: string().min(8).required(),
+    confirmPassword: string().oneOf(
+      [formData.password],
+      "Password do not match"
+    ),
+  });
+  const loginSchema = object({
+    email: string().email(),
+    password: string().required(),
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -23,14 +36,29 @@ const Form = ({ title }: FormInterface) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (title == "Login"){
-      dispatch(addUser(formData));
+    if (title == "Login") {
+      loginSchema
+        .validate(formData)
+        .then(() => {
+          dispatch(addUser(formData));
+        })
+        .catch((error) => {
+          console.log(error.message);
+          toast.error(error.message);
+        });
     } else {
-      if(formData.password !== formData.confirmPassword){
-        toast.error("Passwords do not match")
-      } else {
-        dispatch(addUser(formData));
-      }
+      // if (formData.password !== formData.confirmPassword) {
+      //   toast.error("Passwords do not match");
+      // } else {
+        signupSchema
+        .validate(formData)
+        .then(() => {
+          dispatch(addUser(formData));
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+      // }
     }
   };
 
@@ -42,17 +70,16 @@ const Form = ({ title }: FormInterface) => {
 
   return (
     <>
-      <h1 className="text-2xl h-full text-white md:text-black font-semibold mb-4">
+      <h1 className="text-2xl md:h-full text-white md:text-black font-semibold mb-4">
         {title}
       </h1>
-      <Toaster richColors position="bottom-left" closeButton/>
+      <Toaster richColors position="bottom-center" closeButton />
       <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col gap-4">
         <div className="flex flex-col text-white md:text-black">
           <label htmlFor="email" className="mb-1">
             Email:
           </label>
           <input
-            type="email"
             id="email"
             name="email"
             placeholder="Enter your email"
@@ -100,20 +127,14 @@ const Form = ({ title }: FormInterface) => {
         {title === "Login" ? (
           <div className="mt-2 text-white md:text-black ">
             Don't have an account?{" "}
-            <span
-              onClick={() => navigate("/signup")}
-              className="text-blue-500 cursor-pointer hover:underline"
-            >
+            <span onClick={() => navigate("/signup")} className="link">
               Sign up
             </span>
           </div>
         ) : (
           <div className="mt-2 text-white md:text-black">
             Already signed up?{" "}
-            <span
-              onClick={() => navigate("/login")}
-              className="text-blue-500 cursor-pointer hover:underline"
-            >
+            <span onClick={() => navigate("/login")} className="link">
               Login
             </span>
           </div>

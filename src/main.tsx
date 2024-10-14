@@ -6,8 +6,30 @@ import AuthPage from "./Components/AuthPage";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import ProtectedRoute from "./Components/ProtectedRoutes";
+import Dashboard from "./Components/Dashboard";
+import NavElm from "./Components/NavElm";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <ProtectedRoute>{null}</ProtectedRoute>,
+  },
+  {
+    path: "/:navId",
+    element: (
+      <ProtectedRoute>
+        <NavElm />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
   {
     path: "/login",
     element: <AuthPage title={"Login"} />,
