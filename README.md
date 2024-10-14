@@ -6,6 +6,6 @@ Login Application built on react, tailwind and vite. It uses state management li
 - Clone the repository
 - Run `yarn`, `npm install` or `pnpm install`. Thoug the use of pnpm is preferred it doesn't really matter what you choose
 - Run `yarn dev`, `npm run dev` or `pnpm dev` to run the application. 
-- The application will be available in `https://localhost:5173`.
+- The application will be available in `http://localhost:5173`.
 
 This application also has a deployed version that you can access through here:-
