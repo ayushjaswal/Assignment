@@ -8,4 +8,4 @@ Login Application built on react, tailwind and vite. It uses state management li
 - Run `yarn dev`, `npm run dev` or `pnpm dev` to run the application. 
 - The application will be available in `http://localhost:5173`.
 
-This application also has a deployed version that you can access through here:-
+This application also has a deployed version that you can access through here:- [Deployed site](https://assignment-livid-five.vercel.app)
